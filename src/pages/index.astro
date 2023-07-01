@@ -1,0 +1,22 @@
+---
+import PageMeta from "../components/PageMeta.astro";
+import PageLayout from "../layouts/PageLayout.astro";
+import Intro from "../components/Intro.astro";
+import { SITE_TITLE } from "../config";
+import GPTIntro from "../components/GPTIntro.astro";
+import ProjectsList from "../components/ProjectsList.astro";
+---
+
+<PageLayout>
+  <PageMeta title={`${SITE_TITLE} | Web Ninja`} slot="meta" />
+  <Fragment slot="main">
+    <Intro />
+    <GPTIntro />
+    <h2
+      class="font-bold text-text-heading text-xl md:text-2xl mt-5 pb-2 overflow-hidden"
+    >
+      Projects
+    </h2>
+    <ProjectsList showHighlights />
+  </Fragment>
+</PageLayout>

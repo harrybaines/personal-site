@@ -1,0 +1,62 @@
+---
+import { readAll } from "../lib/markdoc/read";
+import { project } from "../lib/markdoc/frontmatter.schema";
+
+const projects = await readAll({
+  directory: "projects",
+  frontmatterSchema: project,
+});
+
+const sortedProjects = projects
+  .filter((p) => p.frontmatter.draft !== true)
+  .sort(
+    (a, b) =>
+      new Date(b.frontmatter.date).valueOf() -
+      new Date(a.frontmatter.date).valueOf()
+  );
+
+const filteredProjects = Astro.props.showHighlights
+  ? sortedProjects.filter((project) => project.frontmatter.featured === true)
+  : sortedProjects;
+---
+
+<ul>
+  {
+    filteredProjects.map((project) => {
+      const { title, date, url } = project.frontmatter;
+
+      const formattedDate = new Date(date).toLocaleDateString("en-us", {
+        year: "numeric",
+        month: "short",
+      });
+
+      return (
+        <li class="grid grid-cols-[1fr] md:grid-cols-[1fr_auto] mb-3 md:gap-2 items-start">
+          <div class="title">
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="unset
+            transition-[background-size] duration-300 
+            bg-gradient-to-r bg-left-bottom bg-no-repeat
+            bg-[length:0%_55%] hover:bg-[length:100%_55%] dark:bg-[length:0%_2px] hover:dark:bg-[length:100%_2px]
+            from-primary-blue to-primary-blue dark:from-primary-blue dark:to-primary-blue
+          "
+            >
+              <span class="text-md font-">{title}</span>
+              <span>
+                <i class="ml-1 mr-1 text-[12px] pb-2 fa-solid fa-up-right-from-square" />
+              </span>
+            </a>
+          </div>
+          <div class="text-gray-500 text-sm">
+            <div class="flex justify-end items-center">
+              <time class="italic">{formattedDate}</time>
+            </div>
+          </div>
+        </li>
+      );
+    })
+  }
+</ul>

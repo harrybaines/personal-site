@@ -1,0 +1,77 @@
+---
+import portrait from "../assets/images/portrait.png";
+import aiLogo from "../assets/images/ai-logo.png";
+---
+
+<script>
+  function animateTypingEffect() {
+    const typedTextElement = document.querySelector(".typing-animation");
+    const textToType = typedTextElement.textContent;
+    typedTextElement.textContent = "";
+
+    const words = textToType.split(" ");
+    let currentWordIndex = 0;
+    let currentWord = "";
+
+    const typingInterval = setInterval(() => {
+      if (currentWordIndex === words.length) {
+        clearInterval(typingInterval);
+        typedTextElement.classList.remove("typing-animation");
+        applyStyles();
+      } else {
+        currentWord += words[currentWordIndex] + " ";
+        typedTextElement.innerHTML = currentWord.replace(
+          /(machine learning engineer|software developer|data science|software engineering|software applications)/g,
+          "<b>$1</b>"
+        );
+        currentWordIndex++;
+      }
+    }, 100);
+  }
+
+  function applyStyles() {
+    const boldElements = document.querySelectorAll(".typing-animation b");
+    boldElements.forEach((element) => {
+      element.style.fontWeight = "bold";
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", animateTypingEffect);
+</script>
+
+<div class="flex items-center space-x-4">
+  <img src={portrait} alt="User Icon" class="w-8 h-8 rounded-full" />
+  <p>Who is Harry?</p>
+</div>
+<div class="flex items-start space-x-4 mt-4">
+  <img src={aiLogo} alt="User Icon" class="w-8 h-8 rounded-full mt-[2px]" />
+  <p class="dark:text-gray-300 typing-animation min-h-[100px]">
+    Harry is a machine learning engineer and software developer. He works at the
+    intersection of data science and software engineering. He enjoys building
+    and deploying software applications.
+  </p>
+</div>
+
+<style>
+  .typing-animation {
+    display: inline-block;
+    animation: typing 1s steps(40, end);
+  }
+  .typing-animation::after {
+    content: "";
+    display: inline-block;
+    width: 0.5em;
+    height: 1.25em;
+    background-color: #cccccc;
+    margin-left: 0.1em;
+    vertical-align: -0.25em;
+  }
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+</style>
