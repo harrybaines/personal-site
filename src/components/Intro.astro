@@ -1,8 +1,9 @@
 ---
+import { SITE_DESCRIPTION } from "../config";
 ---
 
-<section class="mb-8">
-  <div class="mb-6">
+<section>
+  <div class="mb-6 py-8">
     <h1
       class="font-bold text-text-heading text-center text-4xl md:text-5xl pt-4 pb-2 overflow-hidden"
     >
@@ -12,25 +13,8 @@
         Harry Baines
       </span>
     </h1>
-    <!-- <p class="text-2xl pb-4">Web Developer. OSS Wizard. Blogger.</p> -->
-  </div>
-  <div>
-    <p class="mb-5">
-      Hello! This is a starter template to build your own blog with
-      <a href={"https://github.com/flexdinesh/blogster"} target="_blank"
-        >Blogster</a
-      >. Available in four themes
-      <a href={"https://blogster-minimal.netlify.app"} target="_blank"
-        >minimal</a
-      >,
-      <a href={"https://blogster-sleek.netlify.app"} target="_blank">sleek</a>,
-      <a href={"https://blogster-newspaper.netlify.app"} target="_blank"
-        >newspaper</a
-      > and
-      <a href={"https://blogster-bubblegum.netlify.app"} target="_blank"
-        >bubblegum</a
-      >. This blog is a demo for <strong>bubblegum</strong> theme. Get started with
-      one simple command.
+    <p class="text-lg text-center text-gray-500 dark:text-gray-300 mt-4">
+      {SITE_DESCRIPTION}
     </p>
   </div>
 </section>

@@ -2,7 +2,7 @@
 import PageMeta from "../components/PageMeta.astro";
 import PageLayout from "../layouts/PageLayout.astro";
 import Intro from "../components/Intro.astro";
-import { SITE_TITLE } from "../config";
+import { EMAIL, SITE_TITLE } from "../config";
 import GPTIntro from "../components/GPTIntro.astro";
 import ProjectsList from "../components/ProjectsList.astro";
 ---
@@ -13,10 +13,22 @@ import ProjectsList from "../components/ProjectsList.astro";
     <Intro />
     <GPTIntro />
     <h2
-      class="font-bold text-text-heading text-xl md:text-2xl mt-5 pb-2 overflow-hidden"
+      class="font-bold text-text-heading text-xl md:text-2xl mt-10 pb-2 overflow-hidden"
     >
       Projects
     </h2>
     <ProjectsList showHighlights />
+    <div class="py-10">
+      <p class="text-sm text-gray-500 bg-gray-100 p-8 w-full rounded-lg">
+        I am currently seeking new opportunities where I can apply my skills and
+        expertise in data science and software development. I am eager to join a
+        team that is passionate about pushing the boundaries of AI and building
+        innovative solutions.
+        <br /><br />
+        If you have any exciting projects or job opportunities, I would love to connect
+        and discuss how I can contribute. Please feel free to reach out to me via
+        <a href=`mailto:${EMAIL}`>email</a>! 🙂
+      </p>
+    </div>
   </Fragment>
 </PageLayout>

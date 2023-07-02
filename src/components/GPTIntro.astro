@@ -1,15 +1,15 @@
 ---
 import portrait from "../assets/images/portrait.png";
-import aiLogo from "../assets/images/ai-logo.png";
+import aiLogo from "../assets/images/ai-logo.svg";
 ---
 
 <script>
   function animateTypingEffect() {
     const typedTextElement = document.querySelector(".typing-animation");
-    const textToType = typedTextElement.textContent;
-    typedTextElement.textContent = "";
+    const originalText = typedTextElement.innerHTML;
+    typedTextElement.innerHTML = "";
 
-    const words = textToType.split(" ");
+    const words = originalText.split(" ");
     let currentWordIndex = 0;
     let currentWord = "";
 
@@ -20,10 +20,17 @@ import aiLogo from "../assets/images/ai-logo.png";
         applyStyles();
       } else {
         currentWord += words[currentWordIndex] + " ";
-        typedTextElement.innerHTML = currentWord.replace(
+        const tempElement = document.createElement("span");
+        tempElement.innerHTML = currentWord.replace(
           /(machine learning engineer|software developer|data science|software engineering|software applications)/g,
           "<b>$1</b>"
         );
+
+        // Clone the tempElement and append it to the typedTextElement
+        const clonedElement = tempElement.cloneNode(true);
+        typedTextElement.innerHTML = "";
+        typedTextElement.appendChild(clonedElement);
+
         currentWordIndex++;
       }
     }, 100);
@@ -36,25 +43,29 @@ import aiLogo from "../assets/images/ai-logo.png";
     });
   }
 
-  document.addEventListener("DOMContentLoaded", animateTypingEffect);
+  document.addEventListener("DOMContentLoaded", () => {
+    const typingElement = document.querySelector(".typing-animation");
+    typingElement.classList.remove("hidden");
+    animateTypingEffect();
+  });
 </script>
 
 <div class="flex items-center space-x-4">
-  <img src={portrait} alt="User Icon" class="w-8 h-8 rounded-full" />
+  <img src={portrait} alt="User Icon" class="w-7 h-7 rounded-full" />
   <p>Who is Harry?</p>
 </div>
 <div class="flex items-start space-x-4 mt-4">
-  <img src={aiLogo} alt="User Icon" class="w-8 h-8 rounded-full mt-[2px]" />
-  <p class="dark:text-gray-300 typing-animation min-h-[100px]">
+  <img src={aiLogo} alt="User Icon" class="w-7 h-7 rounded-full" />
+  <p class="dark:text-gray-300 typing-animation min-h-[100px] hidden">
     Harry is a machine learning engineer and software developer. He works at the
     intersection of data science and software engineering. He enjoys building
-    and deploying software applications.
+    and deploying open source software applications. You can read more about him
+    <a href="/about" class="underline">here</a>.
   </p>
 </div>
 
 <style>
   .typing-animation {
-    display: inline-block;
     animation: typing 1s steps(40, end);
   }
   .typing-animation::after {

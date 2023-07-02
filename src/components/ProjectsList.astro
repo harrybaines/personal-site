@@ -9,11 +9,29 @@ const projects = await readAll({
 
 const sortedProjects = projects
   .filter((p) => p.frontmatter.draft !== true)
-  .sort(
-    (a, b) =>
-      new Date(b.frontmatter.date).valueOf() -
-      new Date(a.frontmatter.date).valueOf()
-  );
+  .sort((a, b) => {
+    const endA = a.frontmatter.end;
+    const endB = b.frontmatter.end;
+    const startA = new Date(a.frontmatter.start).valueOf();
+    const startB = new Date(b.frontmatter.start).valueOf();
+
+    if (endA === "Present" && endB === "Present") {
+      // Prioritize the project with the earliest start date when both projects have an end date of "Present"
+      return startA - startB;
+    } else if (endA === "Present") {
+      return -1; // Put the project with endA as "Present" first
+    } else if (endB === "Present") {
+      return 1; // Put the project with endB as "Present" first
+    } else if (endA && endB) {
+      // Sort by end date in descending order if both projects have different end dates
+      const endComparison = new Date(endB).valueOf() - new Date(endA).valueOf();
+      if (endComparison !== 0) {
+        return endComparison;
+      }
+    }
+
+    return startB - startA; // Sort by start date in descending order as fallback
+  });
 
 const filteredProjects = Astro.props.showHighlights
   ? sortedProjects.filter((project) => project.frontmatter.featured === true)
@@ -23,12 +41,23 @@ const filteredProjects = Astro.props.showHighlights
 <ul>
   {
     filteredProjects.map((project) => {
-      const { title, date, url } = project.frontmatter;
-
-      const formattedDate = new Date(date).toLocaleDateString("en-us", {
+      const { title, start, end, url } = project.frontmatter;
+      const formattedStartDate = new Date(start).toLocaleDateString("en-us", {
         year: "numeric",
         month: "short",
       });
+      let formattedEndDate = end === "Present" ? "Present" : null;
+
+      if (end && end !== "Present") {
+        formattedEndDate = new Date(end).toLocaleDateString("en-us", {
+          year: "numeric",
+          month: "short",
+        });
+      }
+
+      const dateRange = end
+        ? `${formattedStartDate} - ${formattedEndDate}`
+        : formattedStartDate;
 
       return (
         <li class="grid grid-cols-[1fr] md:grid-cols-[1fr_auto] mb-3 md:gap-2 items-start">
@@ -38,11 +67,11 @@ const filteredProjects = Astro.props.showHighlights
               target="_blank"
               rel="noopener noreferrer"
               class="unset
-            transition-[background-size] duration-300 
-            bg-gradient-to-r bg-left-bottom bg-no-repeat
-            bg-[length:0%_55%] hover:bg-[length:100%_55%] dark:bg-[length:0%_2px] hover:dark:bg-[length:100%_2px]
-            from-primary-blue to-primary-blue dark:from-primary-blue dark:to-primary-blue
-          "
+              transition-[background-size] duration-300 
+              bg-gradient-to-r bg-left-bottom bg-no-repeat
+              bg-[length:0%_55%] hover:bg-[length:100%_55%] dark:bg-[length:0%_2px] hover:dark:bg-[length:100%_2px]
+              from-primary-blue to-primary-blue dark:from-primary-blue dark:to-primary-blue
+            "
             >
               <span class="text-md font-">{title}</span>
               <span>
@@ -52,7 +81,7 @@ const filteredProjects = Astro.props.showHighlights
           </div>
           <div class="text-gray-500 text-sm">
             <div class="flex justify-end items-center">
-              <time class="italic">{formattedDate}</time>
+              <time class="italic">{dateRange}</time>
             </div>
           </div>
         </li>
